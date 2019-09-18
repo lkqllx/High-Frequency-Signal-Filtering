@@ -1,3 +1,5 @@
+"""One time program for reformatting original 2330.TW data"""
+
 import pandas as pd
 from scipy import fftpack
 import matplotlib.pyplot as plt
@@ -15,6 +17,7 @@ def reformat_tw_data(file, ticker):
     df.to_csv(f'../data/{ticker}.csv')
 
 def fourier_transform(file):
+    """Trial of using fourier transform for changing the signal into frequency domain"""
     df = pd.read_csv(file, index_col=0)
     x = df['lastPx'].values[:1000]
     x = x.tolist()
