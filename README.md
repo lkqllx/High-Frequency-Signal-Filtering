@@ -9,9 +9,9 @@ avoid over-fitting.
 
     where one function and one class were included:
     
-    -> *func* noise_signal: to add noise in original data
+    -> **func** noise_signal: to add noise in original data
     
-    -> *class* RandSignal: to create step or high frequency like signal
+    -> **class** RandSignal: to create step or high frequency like signal
 * 
 
 
