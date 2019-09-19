@@ -91,11 +91,11 @@ if __name__ == '__main__':
     r = RandSignal(upper=10, lower=1, freq=0.1, size=10)
     step_signal = list(r.fake_signal)
     v = VisualTool(step_signal)
-    v.plot_line(percent=1)
+    v.plot_line(percent=1, to_png=True, png_path='../figs/simulated_clean.png')
 
     noise_signal = noise_signal(step_signal)
     v = VisualTool(noise_signal)
-    v.plot_line(percent=1)
+    v.plot_line(percent=1, to_png=True, png_path='../figs/simulated_noisy.png')
 
 
 
