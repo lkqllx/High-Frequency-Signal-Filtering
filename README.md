@@ -12,6 +12,8 @@ avoid over-fitting.
     -> **func** noise_signal: to add noise in original data
     
     -> **class** RandSignal: to create step or high frequency like signal
+    
+    
 * [codes/visualization.py](https://github.com/lkqllx/High-Frequency-Signal-Filtering/blob/master/codes/visualization.py)
 This module was created for visualizing the line plot of signals from csv or list format
 
@@ -19,16 +21,16 @@ This module was created for visualizing the line plot of signals from csv or lis
     
     -> **class** VisualTool: to plot real or simulated signals
     
-    SAMPLE
-    + clean step signal
+    ### SAMPLE OUTPUT
+    + **Clean Step**
     ![clean step signal](figs/step_clean.png)
-    + noised step signal
+    + **Noised Step**
     ![noisy step signal](figs/step_noisy.png)
-    + clean simulated signal
+    + **Clean Fake**
     ![clean simulated signal](figs/simulated_clean.png)
-    + noisy simulated signal
+    + **Noised Fake**
     ![noisy simulated signal](figs/simulated_noisy.png)
-    + 0005 HK signal
+    + **0005 HK signal**
     ![0005 HK signal](figs/0005_HK_Plot.png)
   
 ## Data Description
