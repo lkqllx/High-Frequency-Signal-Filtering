@@ -4,7 +4,7 @@ import cvxpy as cp
 import numpy as np
 from scipy.sparse import spdiags
 from simulation import RandSignal, noise_signal
-import matplotlib.pyplot as plt
+from visualization import plot_two_lines
 import pandas as pd
 
 class Filters:
@@ -24,7 +24,6 @@ class Filters:
         length = len(data)
         e = np.ones((1, length))
         D = spdiags(np.vstack((e, -2*e, e)), range(3), length-2, length)
-        full_matrix = D.todense()
         x = cp.Variable(shape=length)
         obj = cp.Minimize(0.5 * cp.sum_squares(data - x)
                           + vlambda * cp.norm(D*x, 1))
@@ -54,22 +53,12 @@ class Filters:
 
 
 if __name__ == '__main__':
-    df = pd.read_csv('../data/0005.csv')[:500]
+    df = pd.read_csv('../data/0005.csv')[:400]
 
     r = RandSignal(upper=10, lower=1, freq=0.1, size=10)
     clean_signal = list(r.fake_signal)
     noise_signal = list(noise_signal(clean_signal))
     l1 = Filters().filter('l1')
-    filtered_value = l1(df.price.values.tolist())
+    filtered_value = l1(noise_signal)
 
-    plt.rc('text', usetex=True)
-    plt.rc('font', family='serif')
-    font = {'weight': 'normal',
-            'size': 16}
-    plt.rc('font', **font)
-    plt.figure(figsize=(6, 6))
-    plt.plot(np.arange(1,len(filtered_value)+1), df.price.values.tolist(), 'k:', linewidth=1.0)
-    plt.plot(np.arange(1,len(filtered_value)+1), np.array(filtered_value), 'b-', linewidth=2.0)
-    plt.xlabel('date')
-    plt.ylabel('log price')
-    plt.show()
+    plot_two_lines(noise_signal, filtered_value, to_png=True, filename='filtered_fake.png')

@@ -4,7 +4,7 @@ visualization.py contains all the functions for plotting.
 import matplotlib.pyplot as plt
 import pandas as pd
 import json
-
+import numpy as np
 
 class VisualTool:
     """
@@ -62,6 +62,22 @@ class VisualTool:
                 return
             plt.show()
 
+
+def plot_two_lines(original_signal, filtered_value, to_png=False, filename=None):
+    plt.rc('text', usetex=True)
+    plt.rc('font', family='serif')
+    font = {'weight': 'normal',
+            'size': 16}
+    plt.rc('font', **font)
+    plt.figure(figsize=(8, 6))
+    plt.plot(np.arange(1,len(filtered_value)+1), original_signal, 'k:', linewidth=1.0)
+    plt.plot(np.arange(1,len(filtered_value)+1), np.array(filtered_value), 'b-', linewidth=2.0)
+    plt.xlabel('date')
+    plt.ylabel('price')
+    if not to_png:
+        plt.show()
+    else:
+        plt.savefig(f'../figs/{filename}')
 
 if __name__ == '__main__':
     v = VisualTool('../data/0005.csv')
