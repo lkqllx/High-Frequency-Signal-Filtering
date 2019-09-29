@@ -18,29 +18,26 @@ This module was created for visualizing the line plot of signals from csv or lis
         -> class VisualTool: # to plot real or simulated signals
     
     ### SAMPLE OUTPUT
-    #### Clean Step
+    ### Clean Step
     ![clean step signal](figs/step_clean.png)
     #### Noised Step
     ![noisy step signal](figs/step_noisy.png)
-    #### Clean Fake
+    ### Clean Fake
     ![clean simulated signal](figs/simulated_clean.png)
-    #### Noised Fake
+    ### Noised Fake
     ![noisy simulated signal](figs/simulated_noisy.png)
-    #### 0005 HK signal
+    ### 0005 HK signal
     ![0005 HK signal](figs/0005_HK_Plot.png)
  
  * [codes/filter.py](https://github.com/lkqllx/High-Frequency-Signal-Filtering/blob/master/codes/filter.py)
  This module was created for construction of different types of filters.
  
-    -> class Filters: # to build filters like l1 or l2.
+        -> class Filters: # to build filters like l1 or l2.
     
     ### SAMPLE OUTPUT of L1 Filter
-    
-    #### Filtered Step Signal ![filtered step signal](figs/filtered_step.png)
-    
-    #### Filtered Fake Signal ![filtered fake signal](figs/filtered_fake.png)
-    
-    #### Filtered 0005 HK ![filtered 0005 HK](figs/filtered_0005.png)
+    ### Filtered Step Signal ![filtered step signal](figs/filtered_step.png)
+    ### Filtered Fake Signal ![filtered fake signal](figs/filtered_fake.png)    
+    ### Filtered 0005 HK ![filtered 0005 HK](figs/filtered_0005.png)
  
 ## Data Description
 Inside the `data/` directory, there are four datasets representing the tick data of `0005.HK, 0700.HK, 2330.TW`
