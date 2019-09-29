@@ -36,14 +36,11 @@ This module was created for visualizing the line plot of signals from csv or lis
     
     ### SAMPLE OUTPUT of L1 Filter
     
-    #### Filtered Step Signal
-    ![filtered step signal](figs/filtered_step.png)
+    #### Filtered Step Signal ![filtered step signal](figs/filtered_step.png)
     
-    #### Filtered Fake Signal
-    ![filtered fake signal](figs/filtered_fake.png)
+    #### Filtered Fake Signal ![filtered fake signal](figs/filtered_fake.png)
     
-    #### Filtered 0005 HK
-    ![filtered 0005 HK](figs/filtered_0005.png)
+    #### Filtered 0005 HK ![filtered 0005 HK](figs/filtered_0005.png)
  
 ## Data Description
 Inside the `data/` directory, there are four datasets representing the tick data of `0005.HK, 0700.HK, 2330.TW`
