@@ -37,9 +37,11 @@ This module was created for visualizing the line plot of signals from csv or lis
     ### SAMPLE OUTPUT of L1 Filter
     
     + **Filtered Step Signal**
+    
     ![filtered step signal](figs/filtered_step.png)
     
     + **Filtered Fake Signal**
+    
     ![filtered fake signal](figs/filtered_fake.png)
     
     + **Filtered 0005 HK**
