@@ -35,10 +35,13 @@ This module was created for visualizing the line plot of signals from csv or lis
     -> class Filters: # to build filters like l1 or l2.
     
     ### SAMPLE OUTPUT of L1 Filter
+    
     + **Filtered Step Signal**
     ![filtered step signal](figs/filtered_step.png)
+    
     + **Filtered Fake Signal**
     ![filtered fake signal](figs/filtered_fake.png)
+    
     + **Filtered 0005 HK**
     ![filtered 0005 HK](figs/filtered_0005.png)
  
