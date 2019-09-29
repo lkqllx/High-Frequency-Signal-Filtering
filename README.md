@@ -6,20 +6,16 @@ Several modules were included in this repo for different usages.
 * [codes/simulation.py](https://github.com/lkqllx/High-Frequency-Signal-Filtering/blob/master/codes/simulation.py)
 This module was created for simulating high frequency signal randomly to validate the algorithms robustness and 
 avoid over-fitting.
-
-    where one function and one class were included:
     
-    -> **func** noise_signal: to add noise in original data
-    
-    -> **class** RandSignal: to create step or high frequency like signal
+        -> def noise_signal: # to add noise in original data
+        
+        -> class RandSignal: # to create step or high frequency like signal
     
     
 * [codes/visualization.py](https://github.com/lkqllx/High-Frequency-Signal-Filtering/blob/master/codes/visualization.py)
 This module was created for visualizing the line plot of signals from csv or list format
-
-    where one class was included:
     
-    -> **class** VisualTool: to plot real or simulated signals
+        -> class VisualTool: # to plot real or simulated signals
     
     ### SAMPLE OUTPUT
     + **Clean Step**
@@ -37,3 +33,4 @@ This module was created for visualizing the line plot of signals from csv or lis
 Inside the `data/` directory, there are four datasets representing the tick data of `0005.HK, 0700.HK, 2330.TW`
 and an unprocessed raw data `trades.csv`. 
 
+$$\in sad = asd$$
