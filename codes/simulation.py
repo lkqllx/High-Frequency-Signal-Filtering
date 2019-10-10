@@ -87,6 +87,9 @@ class RandSignal:
         return result
 
 
+
+
+
 if __name__ == '__main__':
     r = RandSignal(upper=10, lower=1, freq=0.1, size=10)
     step_signal = list(r.fake_signal)

@@ -6,6 +6,7 @@ from scipy.sparse import spdiags
 from simulation import RandSignal, noise_signal
 from visualization import plot_two_lines
 import pandas as pd
+from utility import dif1_matrix
 np.random.seed(1)
 
 class Filters:
@@ -17,8 +18,8 @@ class Filters:
         ->  l1 filter: l1 = Filters().filter('l1')
         ->  l2 filter: l2 = Filters().filter('l2')
     """
-    def filter(self, _type):
-        return eval(f'self.{_type}')
+    def filter(self, type):
+        return eval(f'self.{type}')
 
     @staticmethod
     def l1(data: list, vlambda: int = 10, verbose=False):
@@ -51,6 +52,13 @@ class Filters:
             raise Exception("Solver did not converge!")
         print("optimal objective value: {}".format(obj.value))
         return x.value
+
+    @staticmethod
+    def est_lambda_max(y):
+        length = len(y)
+        D = dif1_matrix(length)[1:, :]
+        lambda_max =  np.matmul(np.matmul(np.linalg.inv(np.matmul(D, np.transpose(D))), D), y)
+        return lambda_max
 
 
 if __name__ == '__main__':

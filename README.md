@@ -39,6 +39,10 @@ This module was created for visualizing the line plot of signals from csv or lis
     ### Filtered Fake Signal ![filtered fake signal](figs/filtered_fake.png)    
     ### Filtered 0005 HK ![filtered 0005 HK](figs/filtered_0005.png)
  
-## Data Description
+## Directory Description
+### [data/](https://github.com/lkqllx/High-Frequency-Signal-Filtering/blob/master/data)
 Inside the `data/` directory, there are four datasets representing the tick data of `0005.HK, 0700.HK, 2330.TW`
-and an unprocessed raw data `trades.csv`. 
+and an unprocessed raw data `trades.csv`.
+
+### [figs/](https://github.com/lkqllx/High-Frequency-Signal-Filtering/blob/master/figs)
+The place to store interim plots for signal processing.
