@@ -27,7 +27,6 @@ def fourier_transform(file):
     sampling = 10
     X = fftpack.fft(x)
     freqs = fftpack.fftfreq(len(x)) * sampling
-
     fig, ax = plt.subplots()
     ax.stem(freqs, np.abs(X))
     ax.set_xlim(-sampling/2, sampling/2)
