@@ -102,6 +102,7 @@ if __name__ == '__main__':
     # signal = signal[(signal['cond'] != 'D') & (signal['cond'] != 'U')].price.values.tolist()
     #
     # backtest(list(signal))
+
     df = combine_lambdas()
     pye_plots(df, title='Performance of different lambdas',
                    save_to='/Users/andrew/Desktop/HKUST/Courses/DB_filter/figs/lambda_perf.html')
