@@ -4,7 +4,8 @@ import pandas as pd
 from scipy import fftpack
 import matplotlib.pyplot as plt
 import numpy as np
-
+import os
+import re
 
 def separate_trades_db(file, ticker):
     df = pd.read_csv(file)
@@ -33,8 +34,25 @@ def fourier_transform(file):
     plt.show()
 
 
+def combine_lambdas(dir_path='../data/results/each_lambda'):
+    os.chdir(dir_path)
+    file_list = os.listdir('.')
+    file_list = [file for file in file_list if file != '.DS_Store']
+    file_list = sorted(file_list, key=lambda x: float(re.findall('([\d.]+).csv', x)[0]))
+    for file in file_list:
+        if re.match('[\d.]+.csv', file):
+            lambda_value = re.findall('([\d.]+).csv', file)
+            curr_df = pd.read_csv(file, names=lambda_value)[1:]
+            try:
+                all_df = pd.concat([all_df, curr_df], axis=1, sort=False)
+            except:
+                all_df = curr_df
+    return all_df
+
+
 if __name__ == '__main__':
     # separate_trades_db('../data/trades.csv', '0005')
     # separate_trades_db('../data/trades.csv', '0700')
     # reformat_tw_data('../data/2330_ori.csv', '2330')
-    fourier_transform('../data/2330.csv')
+    # fourier_transform('../data/2330.csv')
+    df = combine_lambdas()
