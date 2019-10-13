@@ -1,25 +1,20 @@
-from simulation import RandSignal, noise_signal
+import numpy as np
+np.random.seed(1)
 from filter import Filters
 import math
-import numpy as np
 from progress.bar import Bar
-from visualization import VisualTool
 import pandas as pd
 import cvxpy
 import pickle
 import os
-np.random.seed(1)
-
-
-TRAIN_WIN = 1000
+from visualization import pye_plots
+from reformat_data import combine_lambdas
+import re
+TRAIN_WIN = 500
 TEST_WIN = 50
 
 
 def backtest(signal):
-
-    pnl = 0
-    ave_pnls = []
-    episodes = 2
 
     """Based on the range of lambda to estimate the optimal lambda"""
     if os.path.exists('../data/results/lambda.pkl'):
@@ -30,30 +25,37 @@ def backtest(signal):
         with open('../data/results/lambda.pkl', 'wb') as f:
             pickle.dump([lambda_low, lambda_high], f)
 
-    outs = []
-    lambda_low, lambda_high = lambda_low, lambda_high
-    lambda_low = lambda_low if lambda_low > 1 else 1
-    for episode in range(episodes):
-        curr_lambda = lambda_low * (lambda_high / lambda_low) ** (episode / episodes)
+    episodes = 20  # Number of groups for cross validation
+
+    culmulated_outs = []
+    lambda_low, lambda_high = lambda_low if lambda_low > 1 else 1, lambda_high / 100
+    for episode in range(episodes + 1):
+        pnl = 0
+        pnls = []
+        curr_lambda = round(lambda_low * (lambda_high / lambda_low) ** (episode / episodes), 1)
         with Bar(f'Episode - {episode}', max=math.floor(len(signal) / (TRAIN_WIN + TEST_WIN))) as epoch_bar:
-            epoch_bar.next()
             for group in range(math.floor(len(signal) / (TRAIN_WIN + TEST_WIN))):
+                epoch_bar.next()
                 train_data = signal[TRAIN_WIN * group:TRAIN_WIN * (group + 1)]
                 test_data = signal[TRAIN_WIN * (group + 1):(TRAIN_WIN + TEST_WIN) * (group + 1)]
 
                 l1 = Filters().filter('l1')
                 try:
-                    trend = l1(train_data)
+                    trend = l1(train_data, vlambda=curr_lambda)
                 except cvxpy.error.SolverError:
                     print(f'Failed to Converge of lambda {int(curr_lambda)}')
+                    pnls.append(None)
                     continue
                 increment = trend[1] - trend[0]
                 pred = predict(last_price=train_data[-1], increment=increment, size=len(test_data))
                 profit, ave_profit = cal_pnl(test_data, pred)
                 pnl += profit  # Can be treated as errors
-                ave_pnls.append(ave_profit)
-        outs.append((curr_lambda, np.round(np.average(ave_pnls), 2)))
-    pd.DataFrame(outs, columns=['lambda', 'errors']).to_csv('../data/results/cross_validation_lambda.csv', index=False)
+                pnls.append(profit)
+        culmulated_outs.append((curr_lambda, pnl))
+        pd.DataFrame(pnls, columns=['errors']).\
+            to_csv(f'../data/results/each_lambda/{curr_lambda}.csv', index=False)
+    pd.DataFrame(culmulated_outs, columns=['lambda', 'errors']).\
+        to_csv('../data/results/cross_validation_lambda.csv', index=False)
 
     # print(f'Total Earning - {int(pnl)}\n'
     #       f'Ave Earning - {round(np.average(ave_pnls), 1)}')
@@ -84,6 +86,7 @@ def est_lambda_range(signal):
     lambda_std = np.std(lambda_max)
     return lambda_ave - lambda_std * 2, lambda_ave + lambda_std * 2
 
+
 def predict(last_price, increment, size):
     """Predict the price on the basis of the CONSTANT increment"""
     return [(last_price + idx * increment) for idx in range(size)]
@@ -95,10 +98,10 @@ if __name__ == '__main__':
     # signal = noise_signal(r.fake_signal)
 
     """Real Data as Input"""
-    signal = pd.read_csv('../data/0700.csv', index_col=0)
-    signal = signal[(signal['cond'] != 'D') & (signal['cond'] != 'U')].price.values.tolist()
-
-
-    # v = VisualTool(signal)
-    # v.plot_line(percent=1, to_png=False)
-    backtest(list(signal))
+    # signal = pd.read_csv('../data/0700.csv', index_col=0)
+    # signal = signal[(signal['cond'] != 'D') & (signal['cond'] != 'U')].price.values.tolist()
+    #
+    # backtest(list(signal))
+    df = combine_lambdas()
+    pye_plots(df, title='Performance of different lambdas',
+                   save_to='/Users/andrew/Desktop/HKUST/Courses/DB_filter/figs/lambda_perf.html')
