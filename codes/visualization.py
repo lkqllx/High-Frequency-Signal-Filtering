@@ -150,6 +150,7 @@ def plot_profit_line(path, title):
 
     return line
 
+
 def compute_risk_adjusted_return(dir_path='/Users/andrew/Desktop/HKUST/Courses/DB_filter/data/results/each_lambda'):
     os.chdir(dir_path)
     file_list = os.listdir('.')
@@ -164,6 +165,7 @@ def compute_risk_adjusted_return(dir_path='/Users/andrew/Desktop/HKUST/Courses/D
             except:
                 all_df = curr_df
     all_df = all_df.astype(float)
+    # all_df.dropna(inplace=True)
     sharpe_list = [(vlambda, round(all_df[vlambda].mean() / all_df[vlambda].std(), 2)) for vlambda in all_df.columns]
     return pd.DataFrame(sharpe_list, columns=['lambda', 'Risk-adjusted Return'])
 
