@@ -9,26 +9,27 @@ import pickle
 import os
 from visualization import pye_plots
 from reformat_data import combine_lambdas
+import pandas_datareader as web
 import re
 TRAIN_WIN = 500
 TEST_WIN = 50
 
 
-def backtest(signal):
+def backtest(signal, signal_type: str):
 
     """Based on the range of lambda to estimate the optimal lambda"""
-    if os.path.exists('../data/results/lambda.pkl'):
-        with open('../data/results/lambda.pkl', 'rb') as f:
+    if os.path.exists('f../data/results/lambda_{signal_type}.pkl'):
+        with open(f'../data/results/lambda_{signal_type}.pkl', 'rb') as f:
             lambda_low, lambda_high = pickle.load(f)
     else:
         lambda_low, lambda_high = est_lambda_range(signal)
-        with open('../data/results/lambda.pkl', 'wb') as f:
+        with open(f'../data/results/lambda_{signal_type}.pkl', 'wb') as f:
             pickle.dump([lambda_low, lambda_high], f)
 
     episodes = 20  # Number of groups for cross validation
 
     culmulated_outs = []
-    lambda_low, lambda_high = lambda_low if lambda_low > 1 else 1, lambda_high / 100
+    lambda_low, lambda_high = lambda_low if lambda_low > 1 else 1, lambda_high
     for episode in range(episodes + 1):
         pnl = 0
         pnls = []
@@ -97,11 +98,16 @@ if __name__ == '__main__':
     # r = RandSignal(upper=10, lower=1, freq=0.01, size=30)
     # signal = noise_signal(r.fake_signal)
 
+    spx = web.get_data_yahoo('^SPX').Close
+
     """Real Data as Input"""
-    # signal = pd.read_csv('../data/0700.csv', index_col=0)
-    # signal = signal[(signal['cond'] != 'D') & (signal['cond'] != 'U')].price.values.tolist()
-    #
-    # backtest(list(signal))
+    signal = pd.read_csv('../data/0700.csv', index_col=0)
+    signal = signal[(signal['cond'] != 'D') & (signal['cond'] != 'U')]
+    signal['time'] = signal.apply(lambda row: row['date'] + ' ' + row['time'], axis=1)
+    signal.index = pd.to_datetime(signal['time'].values)
+    prices = signal['price'].resample('5S').mean()
+    prices.dropna(inplace=True)
+    backtest(prices.values.tolist(), '700hk')
 
     df = combine_lambdas()
     pye_plots(df, title='Performance of different lambdas',
