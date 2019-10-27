@@ -46,3 +46,24 @@ and an unprocessed raw data `trades.csv`.
 
 ### [figs/](https://github.com/lkqllx/High-Frequency-Signal-Filtering/blob/master/figs)
 The place to store interim plots for signal processing.
+
+## Results
+### Backtesting Performance
+We extended _L1_ trend filter to high frequency data and tune its resampling frequency to see
+what will be the impact. It seems that the 15 seconds is a good hyper-parameter setting.
+
+* Performance of _L1_ filter in different resampling frequencies of 700 HK
+
+|Date|700.HK - 5 sec|700.HK - 15 sec|700.HK - 30 sec|
+|---|:------------:|:------------:|:------------:|
+|09-04|-0.25|-0.15|-0.16|
+|09-05|0.18|0.2|0.11|
+
+* Performance of _L1_ filter in different resampling frequencies of 0005 HK
+
+|Date|5.HK - 5 sec|5.HK - 15 sec|5.HK - 30 sec|
+|---|:------------:|:------------:|:------------:|
+|09-04|0.81|0.92|0.79|
+|09-05|-1.27|-1.02|-0.96|
+
+
