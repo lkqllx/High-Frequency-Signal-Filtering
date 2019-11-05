@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import re
+import swifter
+import datetime as dt
 
 def separate_trades_db(file, ticker):
     df = pd.read_csv(file)
@@ -50,9 +52,23 @@ def combine_lambdas(dir_path='../data/results/each_lambda'):
     return all_df
 
 
+def reformat_datetime(files):
+    for file in files:
+        file_path = os.path.join('../data', file)
+        df = pd.read_csv(file_path)
+        df.dropna(inplace=True)
+        df['Time'] = df.swifter.apply(lambda row: dt.datetime.strptime(' '.join((row['date'], row['time'])),
+                                                                       '%Y-%m-%d %H:%M:%S.%f'), axis=1)
+        df.index = df['Time'].values
+        df.to_csv(file_path)
+
+
+
 if __name__ == '__main__':
     # separate_trades_db('../data/trades.csv', '0005')
     # separate_trades_db('../data/trades.csv', '0700')
     # reformat_tw_data('../data/2330_ori.csv', '2330')
     # fourier_transform('../data/2330.csv')
-    df = combine_lambdas()
+    # df = combine_lambdas()
+
+    reformat_datetime(['0005.csv', '0700.csv'])

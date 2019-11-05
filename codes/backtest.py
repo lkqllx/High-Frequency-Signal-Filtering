@@ -15,7 +15,7 @@ TRAIN_WIN = 500
 TEST_WIN = 50
 
 
-def backtest(signal, signal_type: str):
+def est_lambda(signal, signal_type: str):
 
     """Based on the range of lambda to estimate the optimal lambda"""
     if os.path.exists('f../data/results/lambda_{signal_type}.pkl'):
@@ -49,10 +49,10 @@ def backtest(signal, signal_type: str):
                     continue
                 increment = trend[1] - trend[0]
                 pred = predict(last_price=train_data[-1], increment=increment, size=len(test_data))
-                profit, ave_profit = cal_pnl(test_data, pred)
-                pnl += profit  # Can be treated as errors
-                pnls.append(profit)
-        culmulated_outs.append((curr_lambda, pnl))
+                profit, ave_profit = cal_error(test_data, pred)
+                pnl += ave_profit  # Can be treated as errors
+                pnls.append(ave_profit)
+        culmulated_outs.append((curr_lambda, np.average(pnls)))
         pd.DataFrame(pnls, columns=['errors']).\
             to_csv(f'../data/results/each_lambda/{curr_lambda}.csv', index=False)
     pd.DataFrame(culmulated_outs, columns=['lambda', 'errors']).\
@@ -62,14 +62,14 @@ def backtest(signal, signal_type: str):
     #       f'Ave Earning - {round(np.average(ave_pnls), 1)}')
 
 
-def cal_pnl(test, pred):
+def cal_error(test, pred):
     """
     Compute the total pnl for the set.
     Positive result -> algorithm is able to catch the trend and buy the equity at lower price
     Negative result -> algorithm fails to capture trend
     """
-    return np.sum([test_price - pred_price for test_price, pred_price in zip(test, pred)]), \
-           np.average([test_price - pred_price for test_price, pred_price in zip(test, pred)])
+    return np.sum(np.square([test_price - pred_price for test_price, pred_price in zip(test, pred)])), \
+           np.average(np.square([test_price - pred_price for test_price, pred_price in zip(test, pred)]))
 
 
 def est_lambda_range(signal):
@@ -98,16 +98,15 @@ if __name__ == '__main__':
     # r = RandSignal(upper=10, lower=1, freq=0.01, size=30)
     # signal = noise_signal(r.fake_signal)
 
-    spx = web.get_data_yahoo('^SPX').Close
+    # spx = web.get_data_yahoo('^SPX').Close
 
     """Real Data as Input"""
-    signal = pd.read_csv('../data/0700.csv', index_col=0)
+    signal = pd.read_csv('../data/0700.csv', index_col=0, parse_dates=True)
     signal = signal[(signal['cond'] != 'D') & (signal['cond'] != 'U')]
-    signal['time'] = signal.apply(lambda row: row['date'] + ' ' + row['time'], axis=1)
     signal.index = pd.to_datetime(signal['time'].values)
     prices = signal['price'].resample('5S').mean()
     prices.dropna(inplace=True)
-    backtest(prices.values.tolist(), '700hk')
+    est_lambda(prices.values.tolist(), '700hk')
 
     df = combine_lambdas()
     pye_plots(df, title='Performance of different lambdas',
