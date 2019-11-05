@@ -69,7 +69,7 @@ def cal_error(test, pred):
     Negative result -> algorithm fails to capture trend
     """
     return np.sum(np.square([test_price - pred_price for test_price, pred_price in zip(test, pred)])), \
-           np.average(([test_price - pred_price for test_price, pred_price in zip(test, pred)]))
+           np.average(np.square([test_price - pred_price for test_price, pred_price in zip(test, pred)]))
 
 
 def est_lambda_range(signal):
@@ -106,7 +106,7 @@ if __name__ == '__main__':
     signal.index = pd.to_datetime(signal['Time'].values)
     prices = signal['price'].resample('1S').last()
     prices.dropna(inplace=True)
-    est_lambda(prices.values.tolist()[:30000], '700hk')
+    est_lambda(prices.values.tolist()[:15000], '700hk')
 
     df = combine_lambdas()
     pye_plots(df, title='Performance of different lambdas',
