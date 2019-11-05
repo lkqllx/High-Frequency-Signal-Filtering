@@ -38,7 +38,7 @@ def est_lambda(signal, signal_type: str):
             for group in range(math.floor(len(signal) / (TRAIN_WIN + TEST_WIN))):
                 epoch_bar.next()
                 train_data = signal[TRAIN_WIN * group:TRAIN_WIN * (group + 1)]
-                test_data = signal[TRAIN_WIN * (group + 1):(TRAIN_WIN + TEST_WIN) * (group + 1)]
+                test_data = signal[TRAIN_WIN * (group + 1):(TRAIN_WIN + TEST_WIN) * (group + 1)] 
 
                 l1 = Filters().filter('l1')
                 try:
