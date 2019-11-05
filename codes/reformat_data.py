@@ -2,6 +2,8 @@
 
 import pandas as pd
 from scipy import fftpack
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -63,6 +65,16 @@ def reformat_datetime(files):
         df.to_csv(file_path)
 
 
+def add_volatility(files):
+    for file in files:
+        file_path = os.path.join('../data', file)
+        df = pd.read_csv(file_path, index_col=0, parse_dates=True)
+        df = df.resample('30S').last()
+        df = df[(df['cond'] != 'D') & (df['cond'] != 'U')]
+        df.dropna(inplace=True)
+        df['curr_vol'] = (df['price'] - df['price'].shift(1).fillna(0)) ** 2
+        df['vol'] = df['curr_vol'].rolling(window=600).sum() / 600
+        df.to_csv(file_path)
 
 if __name__ == '__main__':
     # separate_trades_db('../data/trades.csv', '0005')
@@ -71,4 +83,5 @@ if __name__ == '__main__':
     # fourier_transform('../data/2330.csv')
     # df = combine_lambdas()
 
-    reformat_datetime(['0005.csv', '0700.csv'])
+    # reformat_datetime(['0005.csv', '0700.csv'])
+    add_volatility(['0005.csv', '0700.csv'])
