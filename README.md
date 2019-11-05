@@ -57,13 +57,13 @@ what will be the impact. It seems that the 15 seconds is a good hyper-parameter 
 |Date|700.HK - 5 sec|700.HK - 15 sec|700.HK - 30 sec|
 |---|:------------:|:------------:|:------------:|
 |09-04|-0.25|-0.15|-0.16|
-|09-05|0.18|0.2|0.11|
+|09-05|0.25|0.3|0.21|
 
 * Performance of _L1_ filter in different resampling frequencies of 0005 HK
 
 |Date|5.HK - 5 sec|5.HK - 15 sec|5.HK - 30 sec|
 |---|:------------:|:------------:|:------------:|
-|09-04|0.81|0.92|0.79|
+|09-04|1.61|1.92|1.49|
 |09-05|-1.27|-1.02|-0.96|
 
 
