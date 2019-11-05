@@ -11,14 +11,14 @@ from visualization import pye_plots
 from reformat_data import combine_lambdas
 import pandas_datareader as web
 import re
-TRAIN_WIN = 500
-TEST_WIN = 50
+TRAIN_WIN = 600
+TEST_WIN = 30
 
 
 def est_lambda(signal, signal_type: str):
 
     """Based on the range of lambda to estimate the optimal lambda"""
-    if os.path.exists('f../data/results/lambda_{signal_type}.pkl'):
+    if os.path.exists(f'../data/results/lambda_{signal_type}.pkl'):
         with open(f'../data/results/lambda_{signal_type}.pkl', 'rb') as f:
             lambda_low, lambda_high = pickle.load(f)
     else:
@@ -69,7 +69,7 @@ def cal_error(test, pred):
     Negative result -> algorithm fails to capture trend
     """
     return np.sum(np.square([test_price - pred_price for test_price, pred_price in zip(test, pred)])), \
-           np.average(np.square([test_price - pred_price for test_price, pred_price in zip(test, pred)]))
+           np.average(([test_price - pred_price for test_price, pred_price in zip(test, pred)]))
 
 
 def est_lambda_range(signal):
@@ -103,11 +103,11 @@ if __name__ == '__main__':
     """Real Data as Input"""
     signal = pd.read_csv('../data/0700.csv', index_col=0, parse_dates=True)
     signal = signal[(signal['cond'] != 'D') & (signal['cond'] != 'U')]
-    signal.index = pd.to_datetime(signal['time'].values)
-    prices = signal['price'].resample('5S').mean()
+    signal.index = pd.to_datetime(signal['Time'].values)
+    prices = signal['price'].resample('1S').last()
     prices.dropna(inplace=True)
-    est_lambda(prices.values.tolist(), '700hk')
+    est_lambda(prices.values.tolist()[:30000], '700hk')
 
     df = combine_lambdas()
     pye_plots(df, title='Performance of different lambdas',
-                   save_to='/Users/andrew/Desktop/HKUST/Courses/DB_filter/figs/lambda_perf.html')
+              save_to='/Users/andrew/Desktop/HKUST/Courses/DB_filter/figs/lambda_perf.html')
