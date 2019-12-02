@@ -62,18 +62,18 @@ def reformat_datetime(files):
         df['Time'] = df.swifter.apply(lambda row: dt.datetime.strptime(' '.join((row['date'], row['time'])),
                                                                        '%Y-%m-%d %H:%M:%S.%f'), axis=1)
         df.index = df['Time'].values
-        df.to_csv(file_path)
+        df.to_csv(os.path.join('../data', re.findall('[a-z]+s([\d.a-z]+)', file)[0]))
 
 
 def add_volatility(files):
     for file in files:
         file_path = os.path.join('../data', file)
         df = pd.read_csv(file_path, index_col=0, parse_dates=True)
-        df = df.resample('30S').last()
+        df = df.resample('1S').last()
         df = df[(df['cond'] != 'D') & (df['cond'] != 'U')]
         df.dropna(inplace=True)
         df['curr_vol'] = (df['price'] - df['price'].shift(1).fillna(0)) ** 2
-        df['vol'] = df['curr_vol'].rolling(window=600).sum() / 600
+        df['vol'] = df['curr_vol'].rolling(window=200).sum() / 200
         df.to_csv(file_path)
 
 if __name__ == '__main__':
@@ -83,5 +83,5 @@ if __name__ == '__main__':
     # fourier_transform('../data/2330.csv')
     # df = combine_lambdas()
 
-    # reformat_datetime(['0005.csv', '0700.csv'])
+    # reformat_datetime(['trades0005.csv', 'trades0700.csv'])
     add_volatility(['0005.csv', '0700.csv'])
