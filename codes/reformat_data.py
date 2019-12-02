@@ -10,6 +10,8 @@ import os
 import re
 import swifter
 import datetime as dt
+import pandas_datareader as web
+
 
 def separate_trades_db(file, ticker):
     df = pd.read_csv(file)
@@ -76,6 +78,12 @@ def add_volatility(files):
         df['vol'] = df['curr_vol'].rolling(window=200).sum() / 200
         df.to_csv(file_path)
 
+
+def download_price():
+    df = web.get_data_yahoo('^GSPC').Close
+    df.to_csv('../data/sp.csv')
+
+
 if __name__ == '__main__':
     # separate_trades_db('../data/trades.csv', '0005')
     # separate_trades_db('../data/trades.csv', '0700')
@@ -84,4 +92,5 @@ if __name__ == '__main__':
     # df = combine_lambdas()
 
     # reformat_datetime(['trades0005.csv', 'trades0700.csv'])
-    add_volatility(['0005.csv', '0700.csv'])
+    # add_volatility(['0005.csv', '0700.csv'])
+    download_price()
