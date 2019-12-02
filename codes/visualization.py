@@ -69,17 +69,22 @@ class VisualTool:
             plt.show()
 
 
-def plot_two_lines(original_signal, filtered_value, to_png=False, filename=None):
+def plot_two_lines(original_signal: pd.Series, filtered_value: pd.Series, to_png=False, filename=None):
     plt.rc('text', usetex=True)
     plt.rc('font', family='serif')
     font = {'weight': 'normal',
             'size': 16}
     plt.rc('font', **font)
-    plt.figure(figsize=(8, 6))
-    plt.plot(np.arange(1,len(filtered_value)+1), original_signal, 'k:', linewidth=1.0)
-    plt.plot(np.arange(1,len(filtered_value)+1), np.array(filtered_value), 'b-', linewidth=2.0)
+    fig = plt.figure(figsize=(12, 8), dpi=900)
+    # original_signal.plot('b-', linewidth=2.0)
+    # filtered_value.plot('r--', linewidth=2.0)
+    plt.plot(original_signal.index.values, original_signal.values, color='turquoise', linestyle='solid', linewidth=2.0,
+             label='S&P500')
+    plt.plot(filtered_value.index.values, filtered_value.values, color='tomato', linestyle='dashed', linewidth=2.0,
+             label='L1-Filter Estimated Trend')
     plt.xlabel('date')
-    plt.ylabel('price')
+    plt.ylabel('log(price)')
+    plt.legend()
     if not to_png:
         plt.show()
     else:
@@ -182,4 +187,4 @@ def pye_plots(data: pd.DataFrame, title, save_to):
 
 if __name__ == '__main__':
     v = VisualTool('../data/0005.csv')
-    v.plot_line('price', 0.01, True, '../figs/0005_HK_Plot.png')
+    v.plot_line('price', 0.1, True, '../figs/0005_HK_Plot.png')

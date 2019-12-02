@@ -7,6 +7,7 @@ from simulation import RandSignal, noise_signal
 from visualization import plot_two_lines
 import pandas as pd
 from utility import dif1_matrix
+import pandas_datareader as web
 np.random.seed(1)
 
 class Filters:
@@ -62,13 +63,19 @@ class Filters:
 
 
 if __name__ == '__main__':
-    df = pd.read_csv('../data/0005.csv')[:400]
+    # df = pd.read_csv('../data/0005.csv')[:400]
     # df = df.price.rolling(window=5, win_type='hamming').mean()
     # df.dropna(inplace=True)
-    r = RandSignal(upper=10, lower=1, freq=0.1, size=10)
-    clean_signal = list(r.fake_signal)
-    noise_signal = list(noise_signal(clean_signal))
-    l1 = Filters().filter('l1')
-    filtered_value = l1(df.price.values.tolist(), vlambda=50)
 
-    plot_two_lines(df.price.values.tolist(), filtered_value, to_png=False, filename='filtered_fake.png')
+    df = web.get_data_yahoo('^GSPC').Close[700:]
+    df.to_csv('../data/sp.csv')
+    dates = df.index.values
+    df = pd.Series(np.log(df), index=dates)
+
+    # r = RandSignal(upper=10, lower=1, freq=0.5, size=10)
+    # clean_signal = list(r.fake_signal)
+    # df = list(noise_signal(clean_signal))
+    l1 = Filters().filter('l1')
+    filtered_value = l1(df.values.tolist(), vlambda=8)
+
+    plot_two_lines(df, pd.Series(filtered_value, index=dates), to_png=True, filename='filtered_fake.png')
