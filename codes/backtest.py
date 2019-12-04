@@ -88,5 +88,9 @@ class Backtest:
 
 if __name__ == '__main__':
     # bt = Backtest('../data/sp.csv', test_start_loc=0, predicting_win=1, feeding_win=3)
+<<<<<<< HEAD
     bt = Backtest('../data/0700.csv', test_start_loc=54000, predicting_win=1, feeding_win=10)
+=======
+    bt = Backtest('../data/0700.csv', test_start_loc=50000, predicting_win=1, feeding_win=10)
+>>>>>>> 6e538286fe916e9ca58d0e824bf37c72a860137a
     bt.run()
