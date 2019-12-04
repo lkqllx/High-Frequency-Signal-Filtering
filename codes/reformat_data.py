@@ -80,8 +80,16 @@ def add_volatility(files):
 
 
 def download_price():
-    df = web.get_data_yahoo('^GSPC').Close
+    df = web.get_data_yahoo('^GSPC', start='2015-01-01', end='2019-12-02').Close
     df.to_csv('../data/sp.csv')
+
+def resample():
+    files = ['../data/0005.csv', '../data/0700.csv']
+    for file in files:
+        df = pd.read_csv(file, index_col=0, date_parser=pd.to_datetime)
+        df = df.resample('5T').last()
+        df.dropna(inplace=True)
+        df.to_csv(file)
 
 
 if __name__ == '__main__':
@@ -93,4 +101,5 @@ if __name__ == '__main__':
 
     # reformat_datetime(['trades0005.csv', 'trades0700.csv'])
     # add_volatility(['0005.csv', '0700.csv'])
-    download_price()
+    # download_price()
+    resample()

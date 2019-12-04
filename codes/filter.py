@@ -1,7 +1,7 @@
 """Place to create filters"""
-
-import cvxpy as cp
 import numpy as np
+import cvxpy as cp
+import cvxopt
 from scipy.sparse import spdiags
 from simulation import RandSignal, noise_signal
 from visualization import plot_two_lines
@@ -76,6 +76,6 @@ if __name__ == '__main__':
     # clean_signal = list(r.fake_signal)
     # df = list(noise_signal(clean_signal))
     l1 = Filters().filter('l1')
-    filtered_value = l1(df.values.tolist(), vlambda=8)
+    filtered_value = l1(df.values.tolist(), vlambda=1)
 
-    plot_two_lines(df, pd.Series(filtered_value, index=dates), to_png=True, filename='filtered_fake.png')
+    plot_two_lines(df, pd.Series(filtered_value, index=dates), to_png=False, filename='filtered_fake.png')

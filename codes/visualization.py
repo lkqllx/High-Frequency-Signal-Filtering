@@ -1,8 +1,6 @@
 """
 visualization.py contains all the functions for plotting.
 """
-import matplotlib
-matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import pandas as pd
 import json
@@ -70,25 +68,28 @@ class VisualTool:
 
 
 def plot_two_lines(original_signal: pd.Series, filtered_value: pd.Series, to_png=False, filename=None):
-    plt.rc('text', usetex=True)
-    plt.rc('font', family='serif')
-    font = {'weight': 'normal',
-            'size': 16}
-    plt.rc('font', **font)
-    fig = plt.figure(figsize=(12, 8), dpi=900)
+    # plt.rc('text', usetex=True)
+    # plt.rc('font', family='serif')
+    # font = {'weight': 'normal',
+    #         'size': 16}
+    # plt.rc('font', **font)
+
     # original_signal.plot('b-', linewidth=2.0)
     # filtered_value.plot('r--', linewidth=2.0)
-    plt.plot(original_signal.index.values, original_signal.values, color='turquoise', linestyle='solid', linewidth=2.0,
-             label='S&P500')
-    plt.plot(filtered_value.index.values, filtered_value.values, color='tomato', linestyle='dashed', linewidth=2.0,
-             label='L1-Filter Estimated Trend')
-    plt.xlabel('date')
-    plt.ylabel('log(price)')
-    plt.legend()
-    if not to_png:
-        plt.show()
-    else:
-        plt.savefig(f'../figs/{filename}')
+    with plt.style.context('ggplot'):
+        plt.figure(figsize=(14,10))
+        plt.plot(original_signal.index.values, original_signal.values, color='turquoise', linestyle='solid', linewidth=2.0,
+                 label='SP500')
+        plt.plot(filtered_value.index.values, filtered_value.values, color='tomato', linestyle='dashed', linewidth=2.0,
+                 label='L1-Filter Estimated Trend')
+        plt.xlabel('date')
+        plt.ylabel('log(price)')
+        plt.legend()
+        plt.title('LAMBDA - 1')
+        if not to_png:
+            plt.show()
+        else:
+            plt.savefig(f'{filename}')
 
 
 def plot_pye_lines(data: pd.DataFrame, title):
