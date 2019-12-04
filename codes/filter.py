@@ -1,7 +1,7 @@
 """Place to create filters"""
-
-import cvxpy as cp
 import numpy as np
+import cvxpy as cp
+import cvxopt
 from scipy.sparse import spdiags
 from simulation import RandSignal, noise_signal
 from visualization import plot_two_lines
