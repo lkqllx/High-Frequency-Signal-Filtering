@@ -64,7 +64,9 @@ class Filters:
 
 if __name__ == '__main__':
     df = pd.read_csv('../data/0005.csv', index_col=0, names=['date', 'price'])
-    df = df.iloc[:int(0.1 * df.shape[0]), 0]
+    df = df.iloc[:int(0.1 * df.shape[0]), :]
+    df['price'] = np.log(df['price'])
+    df = df['price']
     # df = df.price.rolling(window=5, win_type='hamming').mean()
     # df.dropna(inplace=True)
 
@@ -79,4 +81,4 @@ if __name__ == '__main__':
     l1 = Filters().filter('l1')
     filtered_value = l1(df.values.tolist(), vlambda=8)
 
-    plot_two_lines(df, pd.Series(filtered_value, index=df.index), to_png=False, filename='filtered_fake.png')
+    plot_two_lines(df, pd.Series(filtered_value), to_png=True, filename='filtered_0005.png')

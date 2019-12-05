@@ -78,18 +78,18 @@ def plot_two_lines(original_signal: pd.Series, filtered_value: pd.Series, to_png
     # filtered_value.plot('r--', linewidth=2.0)
     with plt.style.context('ggplot'):
         plt.figure(figsize=(14,10))
-        plt.plot(original_signal.index.values, original_signal.values, color='turquoise', linestyle='solid', linewidth=2.0,
-                 label='SP500')
+        plt.plot(filtered_value.index.values, original_signal.values, color='turquoise', linestyle='solid', linewidth=2.0,
+                 label='0005HK')
         plt.plot(filtered_value.index.values, filtered_value.values, color='tomato', linestyle='dashed', linewidth=2.0,
                  label='L1-Filter Estimated Trend')
         plt.xlabel('date')
         plt.ylabel('log(price)')
         plt.legend()
-        plt.title('LAMBDA - 1')
+        plt.title('LAMBDA - 8')
         if not to_png:
             plt.show()
         else:
-            plt.savefig(f'{filename}')
+            plt.savefig(f'../figs/{filename}')
 
 
 def plot_pye_lines(data: pd.DataFrame, title):
