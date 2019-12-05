@@ -30,7 +30,7 @@ class VisualTool:
     """
     def __init__(self, target):
         if isinstance(target, str):
-            self.data = pd.read_csv(target, index_col=0)
+            self.data = pd.read_csv(target, index_col=0, names=['date', 'price'])
             self.data.index = pd.to_datetime(self.data.index)
             self._type = 'from_csv'
         elif isinstance(target, list):
