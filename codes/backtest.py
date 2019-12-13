@@ -11,7 +11,7 @@ np.random.seed(1)
 
 
 class Backtest:
-    def __init__(self, path, test_start_loc=0, test_end_loc=None, feeding_win=200, predicting_win=10):
+    def __init__(self, path, test_start_loc=0, test_end_loc=None, feeding_win=3, predicting_win=1):
         self.init_cap = 100000
         self.curr_cap = self.init_cap
         self.risk_free = 0.1 / 365
@@ -71,5 +71,5 @@ class Backtest:
 
 
 if __name__ == '__main__':
-    bt = Backtest('../data/sp.csv')
+    bt = Backtest('../data/sp.csv', test_start_loc=700)
     bt.run()
