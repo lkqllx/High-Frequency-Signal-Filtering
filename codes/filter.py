@@ -1,7 +1,7 @@
 """Place to create filters"""
-
-import cvxpy as cp
 import numpy as np
+import cvxpy as cp
+import cvxopt
 from scipy.sparse import spdiags
 from simulation import RandSignal, noise_signal
 from visualization import plot_two_lines
@@ -63,14 +63,17 @@ class Filters:
 
 
 if __name__ == '__main__':
-    # df = pd.read_csv('../data/0005.csv')[:400]
+    df = pd.read_csv('../data/0005.csv', index_col=0, names=['date', 'price'])
+    df = df.iloc[:int(0.1 * df.shape[0]), :]
+    df['price'] = np.log(df['price'])
+    df = df['price']
     # df = df.price.rolling(window=5, win_type='hamming').mean()
     # df.dropna(inplace=True)
 
-    df = web.get_data_yahoo('^GSPC').Close[700:]
-    df.to_csv('../data/sp.csv')
-    dates = df.index.values
-    df = pd.Series(np.log(df), index=dates)
+    # df = web.get_data_yahoo('^GSPC').Close[700:]
+    # df.to_csv('../data/sp.csv')
+    # dates = df.index.values
+    # df = pd.Series(np.log(df), index=dates)
 
     # r = RandSignal(upper=10, lower=1, freq=0.5, size=10)
     # clean_signal = list(r.fake_signal)
@@ -78,4 +81,4 @@ if __name__ == '__main__':
     l1 = Filters().filter('l1')
     filtered_value = l1(df.values.tolist(), vlambda=8)
 
-    plot_two_lines(df, pd.Series(filtered_value, index=dates), to_png=True, filename='filtered_fake.png')
+    plot_two_lines(df, pd.Series(filtered_value), to_png=True, filename='filtered_0005.png')
