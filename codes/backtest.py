@@ -14,7 +14,7 @@ class Backtest:
     def __init__(self, path, test_start_loc=0, test_end_loc=None, feeding_win=3, predicting_win=1):
         self.init_cap = 100000
         self.curr_cap = self.init_cap
-        self.risk_free = 0.03 / (365*12)
+        self.risk_free = 0.03 / (365)
 
         """After having the optimal lambda, backtesting the strategy"""
         optimal_result = pd.read_csv('../data/results/cross_validation_lambda.csv')
@@ -52,8 +52,9 @@ class Backtest:
                     prev_price = self.data.iloc[curr_idx + self.feeding_win + idx - 1, 0]
                     price = self.data.iloc[curr_idx + self.feeding_win + idx, 0]
                     alpha = trend / (vol)
-                    alpha = min(max(alpha, 0), 1)
-                    self.curr_cap = self.curr_cap + self.curr_cap * ((alpha+0.3) * (price / prev_price - 1) +
+                    alpha = min(max(alpha, -1), 1)
+                    #alpha = alpha + 0.3 if alpha >= 0 else alpha - 0.3
+                    self.curr_cap = self.curr_cap + self.curr_cap * ((alpha) * (price / prev_price - 1) +
                                                      (1 - alpha) * self.risk_free)
                     self.cap_history.append(self.curr_cap)
                     self.expos.append(alpha)
@@ -68,7 +69,7 @@ class Backtest:
                                    columns=['L1-Filter Returns', 'S&P500', 'exposure'],
                                    index=self.data.index.values[self.feeding_win+self.test_start_loc:self.test_end_loc-self.predicting_win])
             plot_df['S&P500'] = ((plot_df['S&P500'] / plot_df['S&P500'].shift(1)))
-            plot_df['0700.HK'] = plot_df['S&P500'].cumprod() * 100000
+            plot_df['S&P500'] = plot_df['S&P500'].cumprod() * 100000
 
             fig = plt.figure(figsize=(16,10))
 
@@ -78,18 +79,18 @@ class Backtest:
             # Divide the figure into a 2x1 grid, and give me the second section
             ax2 = fig.add_subplot(212)
             plot_df.plot(y='L1-Filter Returns', ax=ax1)
-            plot_df.plot(y='0700.HK', ax=ax1)
+            plot_df.plot(y='S&P500', ax=ax1)
             plot_df['exposure'].plot.bar(ax=ax2, sharex=True)
             plt.legend()
             plt.title('Backtesting of Strategy')
             labels = [plot_df.index[idx] for idx in range(0, plot_df.shape[0], 100)]
             plt.xticks(range(0, plot_df.shape[0], 100), labels, rotation=45)
-           # plt.show()
-            plt.savefig('../figs/0700_hf.png', dpi=900)
+            plt.show()
+            #plt.savefig('../figs/0700_hf.png', dpi=900)
 
 
 if __name__ == '__main__':
-    #bt = Backtest('../data/sp.csv', test_start_loc=0, predicting_win=1, feeding_win=5)
-    bt = Backtest('../data/0700.csv', test_start_loc=52000, test_end_loc=53500,predicting_win=5, feeding_win=30)
+    bt = Backtest('../data/sp.csv', test_start_loc=0, predicting_win=1, feeding_win=5)
+    #bt = Backtest('../data/0005.csv', test_start_loc=30000, test_end_loc=None,predicting_win=5, feeding_win=30)
 
     bt.run()
