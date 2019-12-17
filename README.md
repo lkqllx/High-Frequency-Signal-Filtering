@@ -39,6 +39,10 @@ This module was created for visualizing the line plot of signals from csv or lis
     ### Filtered Fake Signal ![filtered fake signal](figs/filtered_fake.png)    
     ### Filtered 0005 HK ![filtered 0005 HK](figs/filtered_0005.png)
  
+ * [codes/backtest.py](https://github.com/lkqllx/High-Frequency-Signal-Filtering/blob/master/codes/backtest.py)
+ This file is created for back-testing the strategy of S&P500, 0005.HK and 0700.HK.
+ 
+ 
 ## Directory Description
 ### [data/](https://github.com/lkqllx/High-Frequency-Signal-Filtering/blob/master/data)
 Inside the `data/` directory, there are four datasets representing the tick data of `0005.HK, 0700.HK, 2330.TW`

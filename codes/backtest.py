@@ -53,7 +53,6 @@ class Backtest:
                     price = self.data.iloc[curr_idx + self.feeding_win + idx, 0]
                     alpha = trend / (vol)
                     alpha = min(max(alpha, -1), 1)
-                    #alpha = alpha + 0.3 if alpha >= 0 else alpha - 0.3
                     self.curr_cap = self.curr_cap + self.curr_cap * ((alpha) * (price / prev_price - 1) +
                                                      (1 - alpha) * self.risk_free)
                     self.cap_history.append(self.curr_cap)
@@ -91,6 +90,4 @@ class Backtest:
 
 if __name__ == '__main__':
     bt = Backtest('../data/sp.csv', test_start_loc=0, predicting_win=1, feeding_win=5)
-    #bt = Backtest('../data/0005.csv', test_start_loc=30000, test_end_loc=None,predicting_win=5, feeding_win=30)
-
     bt.run()

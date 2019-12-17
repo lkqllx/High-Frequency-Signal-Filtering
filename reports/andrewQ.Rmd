@@ -1,0 +1,63 @@
+---
+title: "Reply of Self Financing"
+author: "ANDREW LI"
+date: "11/20/2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+1. Write wealth W(t), risk stock price S(t) with units a(t), bond price B(t) with units d(t).  Then what is W(t)  in terms of these quantities?
+
+$$W_t = a_t * S_t + d_t * B_t$$
+
+2. What is the self financing condition?   Write it down using your result from 1.
+
+$$\partial W_t = a_t * \partial S_t + d_t * \partial B_t$$
+
+3. What is the new wealth at time W(t+1) in terms of the quantities a,S,B,d before you rebalance the portfolio and after you rebalance assuming zero transaction fees?  Why does rebalancing require you to use 2?
+
+> a. Before rebalancing
+
+$$W_{t+1} = a_t * S_{t+1} + d_t * B_{t+1}$$
+
+> b. After rebalancing 
+
+$$W_{t+1} = a_{t+1} * S_{t+1} + d_{t+1} * B_{t+1}$$
+
+
+4. What is alpha(t) in terms of a, S, b, B, W?
+
+> To compute $\alpha_t$, I used Eq.1 and obtained:
+
+$$\alpha_t = \frac{a_t * S_t}{a_t * S_t + d_t * B_t} = \frac{a_t * S_t}{W_t}$$
+
+> From above equation, we have following relationships
+
+$$a_t = \frac{\alpha_tW_t}{S_t}$$
+$$d_t = \frac{(1 - \alpha_t)W_t}{B_t}$$
+
+5. Solve for the recurrence equation in return space by using your results from 1, 2, 3, 4 and recreate the wealth recurrence equation.
+
+$$W_{t+1} - W_{t} = a_t*(S_{t+1} - S_{t}) + d_t*(B_{t+1} - B_{t})$$
+
+> and we substitute the $a_t$ and $d_t$ into the equation
+$$W_{t+1} = W_t + W_t\left[\alpha_t*(\frac{S_{t+1}}{S_t} - 1) + (1 - \alpha_t) * (\frac{B_{t+1}}{B_t} - 1)\right]$$
+
+> If we further assume $r_t = \frac{B_{t+1}}{B_t} - 1$, we then have
+$$W_{t+1} = W_t + W_t\left[\alpha_t*(\frac{S_{t+1}}{S_t} - 1) + (1 - \alpha_t) * r_t)\right]$$
+
+**So after some steps of calculation, I proved the original equation is correct... and my problem still holds the weird return jump caused by the discrete and imbalanced data inputs.**
+
+
+
+
+
+
+
+
+
+
